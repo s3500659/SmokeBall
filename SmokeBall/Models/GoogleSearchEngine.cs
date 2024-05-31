@@ -7,7 +7,7 @@ namespace Models
     {
         public string Search(SearchInputModel searchInput)
         {
-            var content = File.ReadAllText("searchResult.txt");
+            var content = File.ReadAllText(@"..\searchResult.txt");
 
             // The search result is contained in div's with class MjjYud
             string pattern = "<div\\s+class=\"MjjYud\"[^>]*>(.*?)</div>";

@@ -6,6 +6,6 @@ namespace Models
     {
         public string? Keyword { get; set; }
         public int? SearchLimit { get; set; }
-        public SearchEngine Engine { get; set; }
+        public SearchEngineType Engine { get; set; }
     }
 }

@@ -7,13 +7,12 @@ namespace API.Controllers
     [Route("[controller]")]
     public class SearchController : ControllerBase
     {
-        private ISearchEngine _searchEngine;
+        private readonly ISearchEngine _searchEngine;
         public SearchController(ISearchEngine searchEngine)
         {
             _searchEngine = searchEngine;
         }
 
-        public ISearchEngine SearchEngine { get; }
 
         [HttpPost]
         public async Task<IActionResult> Search([FromBody] SearchInputModel searchInput)
@@ -23,6 +22,8 @@ namespace API.Controllers
                 return BadRequest("Search input cannot be null.");
             }
 
+            // Mock search
+            await Task.Delay(100);
             string result = _searchEngine.Search(searchInput);
 
 

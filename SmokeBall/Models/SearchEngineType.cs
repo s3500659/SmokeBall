@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public enum SearchEngine
+    public enum SearchEngineType
     {
         Google
     }

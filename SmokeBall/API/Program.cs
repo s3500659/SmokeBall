@@ -12,6 +12,7 @@ namespace API
             builder.Services.AddSingleton<ISearchEngine, SearchService>();
             builder.Services.AddSingleton<IFileReader, FileReader>();
             builder.Services.AddSingleton<IStringBuilderWrapper, StringBuilderWrapper>();
+            builder.Services.AddSingleton<IRegexMatcher, RegexMatcher>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -7,12 +7,17 @@ namespace API
     public class SearchService : ISearchEngine
     {
         private const string FILE_PATH = @"..\searchResult.txt";
+        private const string REGEX_PATTERN = "<div\\s+class=\"MjjYud\"[^>]*>(.*?)</div>";
+        private const string SEARCH_URL = "www.smokeball.com.au";
+
         private readonly IFileReader _fileReader;
         private readonly IStringBuilderWrapper _sb;
-        public SearchService(IFileReader fileReader, IStringBuilderWrapper stringBuilder)
+        private readonly IRegexMatcher _regex;
+        public SearchService(IFileReader fileReader, IStringBuilderWrapper stringBuilder, IRegexMatcher regexMatcher)
         {
             _fileReader = fileReader;
             _sb = stringBuilder;
+            _regex = regexMatcher;
         }
 
         public string Search(SearchInputModel searchInput)
@@ -33,15 +38,11 @@ namespace API
                     return $"Error reading search result file: {ex.Message}";
                 }
 
-                // The search result is contained in div's with class MjjYud
-                string pattern = "<div\\s+class=\"MjjYud\"[^>]*>(.*?)</div>";
-                Regex regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-                var matches = regex.Matches(content);
+                var matches = _regex.Matches(content, REGEX_PATTERN);
 
                 for (int i = 0; i < matches.Count; i++)
                 {
-                    if (matches[i].Value.Contains("www.smokeball.com.au"))
+                    if (matches[i].Value.Contains(SEARCH_URL))
                     {
                         _sb.Append((i + 1).ToString());
                         _sb.Append(", ");

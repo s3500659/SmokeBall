@@ -13,29 +13,39 @@ namespace API
         private readonly IFileReader _fileReader;
         private readonly IStringBuilderWrapper _sb;
         private readonly IRegexMatcher _regex;
-        public SearchService(IFileReader fileReader, IStringBuilderWrapper stringBuilder, IRegexMatcher regexMatcher)
+        private readonly ILogger<SearchService> _logger;
+
+        public SearchService(IFileReader fileReader, IStringBuilderWrapper stringBuilder, 
+            IRegexMatcher regexMatcher, ILogger<SearchService> logger)
         {
             _fileReader = fileReader;
             _sb = stringBuilder;
             _regex = regexMatcher;
+            _logger = logger;
         }
 
         public string Search(SearchInputModel searchInput)
         {
             if (searchInput.Engine == SearchEngineType.Google)
             {
+                _logger.LogInformation("Starting Google search");
+
                 string content;
                 try
                 {
                     content = _fileReader.ReadAllText(FILE_PATH);
                 }
-                catch (FileNotFoundException)
+                catch (FileNotFoundException ex)
                 {
-                    return "Search result file not found.";
+                    string message = "Search result file not found.";
+                    _logger.LogError(ex, message);
+                    return message;
                 }
                 catch (Exception ex)
                 {
-                    return $"Error reading search result file: {ex.Message}";
+                    string message = "Error reading search result file.";
+                    _logger.LogError(ex, message);
+                    return message + ex.Message;
                 }
 
                 var matches = _regex.Matches(content, REGEX_PATTERN);
@@ -52,11 +62,15 @@ namespace API
                 // Remove comma from end of line. 
                 if (_sb.GetLength() > 0)
                 {
-                    _sb.Remove(_sb.GetLength() - 2, 1);
+                    _sb.Remove(_sb.GetLength() - 2, 2);
                 }
+
+                _logger.LogInformation("Search completed.");
 
                 return _sb.ToString();
             }
+
+            _logger.LogError($"Search engine not implemented");
 
             throw new NotImplementedException("Only mocked Google search.");
         }

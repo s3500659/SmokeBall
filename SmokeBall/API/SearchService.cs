@@ -22,7 +22,7 @@ namespace API
                 string content;
                 try
                 {
-                    content = File.ReadAllText(FILE_PATH);
+                    content = _fileReader.ReadAllText(FILE_PATH);
                 }
                 catch (FileNotFoundException)
                 {

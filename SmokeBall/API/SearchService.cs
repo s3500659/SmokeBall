@@ -6,6 +6,13 @@ namespace API
 {
     public class SearchService : ISearchEngine
     {
+        private const string FILE_PATH = @"..\searchResult.txt";
+        private readonly IFileReader _fileReader;
+        public SearchService(IFileReader fileReader)
+        {
+            _fileReader = fileReader;
+        }
+
         public string Search(SearchInputModel searchInput)
         {
             if (searchInput.Engine == SearchEngineType.Google)
@@ -13,7 +20,7 @@ namespace API
                 string content;
                 try
                 {
-                    content = File.ReadAllText(@"..\searchResult.txt");
+                    content = File.ReadAllText(FILE_PATH);
                 }
                 catch (FileNotFoundException)
                 {

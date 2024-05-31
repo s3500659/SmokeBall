@@ -12,8 +12,8 @@ namespace API.Controllers
         }
 
 
-        [HttpGet(Name = "GetSearchResult")]
-        public string Get()
+        [HttpPost]
+        public string Search(SearchInputModel searchInput)
         {
             return "Your results!";
         }

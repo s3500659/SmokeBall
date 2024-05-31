@@ -27,13 +27,13 @@ namespace WPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string keywords = tbKeywords.Text;
+            string keyword = tbKeywords.Text;
             string searchLimit = tbSearchLimit.Text;
             bool? isGoogle = rbGoogle.IsChecked;
 
-            if (string.IsNullOrWhiteSpace(keywords))
+            if (string.IsNullOrWhiteSpace(keyword))
             {
-                keywords = "Conveyancing Software";
+                keyword = "Conveyancing Software";
             }
 
             if (string.IsNullOrWhiteSpace(searchLimit))
@@ -46,8 +46,14 @@ namespace WPF
                 isGoogle = true;
             }
 
+            SearchInputModel searchInput = new SearchInputModel()
+            {
+                Keyword = keyword,
+                SearchLimit = searchLimit,
+                Engine = SearchEngine.Google
+            };
 
-            string results = SearchEngineService.Search(keywords, searchLimit, SearchEngine.Google);
+            string results = SearchEngineService.Search(searchInput).Result;
 
         }
     }

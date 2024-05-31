@@ -11,6 +11,7 @@ namespace API
             // Add services to the container.
             builder.Services.AddSingleton<ISearchEngine, SearchService>();
             builder.Services.AddSingleton<IFileReader, FileReader>();
+            builder.Services.AddSingleton<IStringBuilderWrapper, StringBuilderWrapper>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

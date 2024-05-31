@@ -8,9 +8,11 @@ namespace API
     {
         private const string FILE_PATH = @"..\searchResult.txt";
         private readonly IFileReader _fileReader;
-        public SearchService(IFileReader fileReader)
+        private readonly IStringBuilderWrapper _sb;
+        public SearchService(IFileReader fileReader, IStringBuilderWrapper stringBuilder)
         {
             _fileReader = fileReader;
+            _sb = stringBuilder;
         }
 
         public string Search(SearchInputModel searchInput)
@@ -37,22 +39,22 @@ namespace API
 
                 var matches = regex.Matches(content);
 
-                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < matches.Count; i++)
                 {
                     if (matches[i].Value.Contains("www.smokeball.com.au"))
                     {
-                        sb.Append(i + 1).Append(", ");
+                        _sb.Append((i + 1).ToString());
+                        _sb.Append(", ");
                     }
                 }
 
                 // Remove comma from end of line. 
-                if (sb.Length > 0)
+                if (_sb.GetLength() > 0)
                 {
-                    sb.Remove(sb.Length - 2, 1);
+                    _sb.Remove(_sb.GetLength() - 2, 1);
                 }
 
-                return sb.ToString();
+                return _sb.ToString();
             }
 
             throw new NotImplementedException("Only mocked Google search.");

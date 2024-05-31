@@ -24,5 +24,31 @@ namespace WPF
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string keywords = tbKeywords.Text;
+            string searchLimit = tbSearchLimit.Text;
+            bool? isGoogle = rbGoogle.IsChecked;
+
+            if (string.IsNullOrWhiteSpace(keywords))
+            {
+                keywords = "Conveyancing Software";
+            }
+
+            if (string.IsNullOrWhiteSpace(searchLimit))
+            {
+                searchLimit = "100";
+            }
+
+            if (isGoogle == null)
+            {
+                isGoogle = true;
+            }
+
+
+            string results = SearchEngineService.Search(keywords, searchLimit, SearchEngine.Google);
+
+        }
     }
 }

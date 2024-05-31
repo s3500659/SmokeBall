@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace API.Controllers
 {
@@ -6,16 +7,28 @@ namespace API.Controllers
     [Route("[controller]")]
     public class SearchController : ControllerBase
     {
-        public SearchController()
+        private ISearchEngine _searchEngine;
+        public SearchController(ISearchEngine searchEngine)
         {
-
+            _searchEngine = searchEngine;
         }
 
+        public ISearchEngine SearchEngine { get; }
 
         [HttpPost]
-        public string Search(SearchInputModel searchInput)
+        public async Task<IActionResult> Search([FromBody] SearchInputModel searchInput)
         {
-            return "Your results!";
+            if (searchInput == null)
+            {
+                return BadRequest("Search input cannot be null.");
+            }
+
+            string result = _searchEngine.Search(searchInput);
+
+
+            return Ok(result);
         }
     }
+
+
 }

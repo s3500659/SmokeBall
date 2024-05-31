@@ -25,7 +25,7 @@ namespace WPF
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             string keyword = tbKeywords.Text;
             string searchLimit = tbSearchLimit.Text;
@@ -50,10 +50,12 @@ namespace WPF
             {
                 Keyword = keyword,
                 SearchLimit = searchLimit,
-                Engine = SearchEngine.Google
+                Engine = isGoogle == true ? SearchEngine.Google : SearchEngine.Google
             };
 
-            string results = SearchEngineService.Search(searchInput).Result;
+            var results = await SearchEngineService.SearchAsync(searchInput);
+
+            tbResults.Text = results;
 
         }
     }

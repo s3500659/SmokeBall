@@ -1,6 +1,3 @@
-
-using Models;
-
 namespace API
 {
     public class Program

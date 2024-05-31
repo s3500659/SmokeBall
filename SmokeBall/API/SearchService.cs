@@ -1,7 +1,8 @@
-﻿using System.Text;
+﻿using Models;
+using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Models
+namespace API
 {
     public class SearchService : ISearchEngine
     {

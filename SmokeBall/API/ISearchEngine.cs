@@ -1,4 +1,6 @@
-﻿namespace Models
+﻿using Models;
+
+namespace API
 {
     public interface ISearchEngine
     {

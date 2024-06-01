@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,9 +37,9 @@ namespace WPF
                 keyword = "Conveyancing Software";
             }
 
-            if (string.IsNullOrWhiteSpace(searchLimit))
+            if (!int.TryParse(searchLimit, out int limit))
             {
-                searchLimit = "100";
+                limit = 100;
             }
 
             if (isGoogle == null)
@@ -49,7 +50,7 @@ namespace WPF
             SearchInputModel searchInput = new SearchInputModel()
             {
                 Keyword = keyword,
-                SearchLimit = searchLimit,
+                SearchLimit = limit,
                 Engine = isGoogle == true ? SearchEngine.Google : SearchEngine.Google
             };
 

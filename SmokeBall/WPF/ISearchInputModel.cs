@@ -4,6 +4,6 @@
     {
         SearchEngine Engine { get; set; }
         string? Keyword { get; set; }
-        string? SearchLimit { get; set; }
+        int? SearchLimit { get; set; }
     }
 }

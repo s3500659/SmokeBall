@@ -7,6 +7,11 @@ using System.Text.RegularExpressions;
 
 public class SearchServiceTests
 {
+    private const string CORRECT_RESULT = "1, 31";
+    private const string NO_RESULT = "0";
+    private const string FILE_PATH = "testSearchResult.txt";
+    private const string SEARCH_URL = "www.smokeball.com.au";
+
     private readonly SearchService _searchService;
     private readonly Mock<IFileReader> _mockFileReader;
     private readonly Mock<IStringBuilderWrapper> _mockStringBuilder;
@@ -32,7 +37,7 @@ public class SearchServiceTests
         var searchInput = new SearchInputModel { Engine = SearchEngineType.Google };
 
         // Act
-        var result = _searchService.Search(searchInput, "testSearchResult.txt", "www.smokeball.com.au");
+        var result = _searchService.Search(searchInput, FILE_PATH, SEARCH_URL);
 
         // Assert
         Assert.Equal("Search result file not found.", result);
@@ -47,7 +52,7 @@ public class SearchServiceTests
         var searchInput = new SearchInputModel { Engine = SearchEngineType.Google };
 
         // Act
-        var result = _searchService.Search(searchInput, "testSearchResult.txt", "www.smokeball.com.au");
+        var result = _searchService.Search(searchInput, FILE_PATH, SEARCH_URL);
 
         // Assert
         Assert.Contains("Error reading search result file.", result);
@@ -61,7 +66,7 @@ public class SearchServiceTests
 
         var searchInput = new SearchInputModel { Engine = SearchEngineType.Bing };
 
-        Assert.Throws<NotImplementedException>(() => _searchService.Search(searchInput, "testSearchResult.txt", "www.smokeball.com.au"));
+        Assert.Throws<NotImplementedException>(() => _searchService.Search(searchInput, FILE_PATH, SEARCH_URL));
     }
 
 
@@ -78,10 +83,10 @@ public class SearchServiceTests
 
 
         // Act
-        var result = searchService.Search(searchInput, @"testSearchResult.txt", "www.smokeball.com.au");
+        var result = searchService.Search(searchInput, FILE_PATH, SEARCH_URL);
 
         // Assert
-        Assert.Equal("1, 31", result);
+        Assert.Equal(CORRECT_RESULT, result);
     }
 
     [Fact]
@@ -97,10 +102,10 @@ public class SearchServiceTests
 
 
         // Act
-        var result = searchService.Search(searchInput, @"testSearchResult.txt", "www.vinh.com.au");
+        var result = searchService.Search(searchInput, FILE_PATH, "www.vinh.com.au");
 
         // Assert
-        Assert.Equal("0", result);
+        Assert.Equal(NO_RESULT, result);
     }
 
 

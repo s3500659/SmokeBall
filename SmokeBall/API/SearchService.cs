@@ -7,6 +7,8 @@ namespace API
     public class SearchService : ISearchEngine
     {
         private const string REGEX_PATTERN = "<div\\s+class=\"MjjYud\"[^>]*>(.*?)</div>";
+        private const string NO_RESULT = "0";
+        private const string INDEX_DELIM = ", ";
 
         private readonly IFileReader _fileReader;
         private readonly IStringBuilderWrapper _sb;
@@ -54,7 +56,7 @@ namespace API
                     if (matches[i].Value.Contains(searchUrl))
                     {
                         _sb.Append((i + 1).ToString());
-                        _sb.Append(", ");
+                        _sb.Append(INDEX_DELIM);
                     }
                 }
 
@@ -65,7 +67,7 @@ namespace API
                 }
                 else
                 {
-                    return "0";
+                    return NO_RESULT;
                 }
 
                 _logger.LogInformation("Search completed.");

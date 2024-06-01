@@ -3,6 +3,7 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace WPF
 {
@@ -29,12 +30,12 @@ namespace WPF
             catch (Exception ex)
             {
 
-                throw new HttpRequestException("Error occurred while sending the request.", ex);
+                return "Error occurred while sending the request: " + ex;
             }
 
             if (response == null)
             {
-                throw new HttpRequestException("No response received from the API.");
+                return "No response received from the API.";
             }
 
             if (response.IsSuccessStatusCode)
@@ -43,8 +44,7 @@ namespace WPF
             }
             else
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Failed to call the API. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}, Content: {responseContent}");
+                return $"Failed to get a successful response from the API. Status code: {response.StatusCode}";
             }
         }
     }

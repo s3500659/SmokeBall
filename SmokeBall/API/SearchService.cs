@@ -6,9 +6,7 @@ namespace API
 {
     public class SearchService : ISearchEngine
     {
-        private const string FILE_PATH = @"..\searchResult.txt";
         private const string REGEX_PATTERN = "<div\\s+class=\"MjjYud\"[^>]*>(.*?)</div>";
-        private const string SEARCH_URL = "www.smokeball.com.au";
 
         private readonly IFileReader _fileReader;
         private readonly IStringBuilderWrapper _sb;
@@ -24,7 +22,7 @@ namespace API
             _logger = logger;
         }
 
-        public string Search(SearchInputModel searchInput)
+        public string Search(SearchInputModel searchInput, string filePath, string searchUrl)
         {
             if (searchInput.Engine == SearchEngineType.Google)
             {
@@ -33,7 +31,7 @@ namespace API
                 string content;
                 try
                 {
-                    content = _fileReader.ReadAllText(FILE_PATH);
+                    content = _fileReader.ReadAllText(filePath);
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -50,9 +48,10 @@ namespace API
 
                 var matches = _regex.Matches(content, REGEX_PATTERN);
 
+
                 for (int i = 0; i < matches.Count; i++)
                 {
-                    if (matches[i].Value.Contains(SEARCH_URL))
+                    if (matches[i].Value.Contains(searchUrl))
                     {
                         _sb.Append((i + 1).ToString());
                         _sb.Append(", ");
@@ -62,12 +61,19 @@ namespace API
                 // Remove comma from end of line. 
                 if (_sb.GetLength() > 0)
                 {
-                    _sb.Remove(_sb.GetLength() - 2, 2);
+                    _sb.Remove(_sb.GetLength() - 2, 1);
+                }
+                else
+                {
+                    return "0";
                 }
 
                 _logger.LogInformation("Search completed.");
 
-                return _sb.ToString();
+                string result = _sb.ToString();
+                _sb.ClearContent();
+
+                return result;
             }
 
             _logger.LogError($"Search engine not implemented");

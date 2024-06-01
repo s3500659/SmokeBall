@@ -12,6 +12,7 @@ namespace Models
         void Remove(int startIndex, int length);
         string ToString();
         int GetLength();
+        void ClearContent();
     }
     public class StringBuilderWrapper : IStringBuilderWrapper
     {
@@ -35,6 +36,11 @@ namespace Models
         public int GetLength()
         {
             return _sb.Length;
+        }
+
+        public void ClearContent()
+        {
+            _sb.Clear();
         }
     }
 }

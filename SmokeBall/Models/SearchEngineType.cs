@@ -2,6 +2,7 @@
 {
     public enum SearchEngineType
     {
-        Google
+        Google,
+        Bing
     }
 }

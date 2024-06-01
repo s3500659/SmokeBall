@@ -39,6 +39,33 @@ public class SearchServiceTests
     }
 
     [Fact]
+    public void Search_ErrorReadingFile_ReturnsErrorMessage()
+    {
+        // Arrange
+        _mockFileReader.Setup(fr => fr.ReadAllText(It.IsAny<string>())).Throws(new Exception());
+
+        var searchInput = new SearchInputModel { Engine = SearchEngineType.Google };
+
+        // Act
+        var result = _searchService.Search(searchInput, "testSearchResult.txt", "www.smokeball.com.au");
+
+        // Assert
+        Assert.Contains("Error reading search result file.", result);
+    }
+
+    [Fact]
+    public void Search_NotUsingGoogle_ThrowsError()
+    {
+        // Arrange
+        _mockFileReader.Setup(fr => fr.ReadAllText(It.IsAny<string>())).Throws(new NotImplementedException());
+
+        var searchInput = new SearchInputModel { Engine = SearchEngineType.Bing };
+
+        Assert.Throws<NotImplementedException>(() => _searchService.Search(searchInput, "testSearchResult.txt", "www.smokeball.com.au"));
+    }
+
+
+    [Fact]
     public void Search_Google_IndexFound()
     {
         // Arrange

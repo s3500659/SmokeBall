@@ -21,15 +21,14 @@ namespace WPF
             var jsonContent = JsonConvert.SerializeObject(searchInput);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage? response = null;
+            HttpResponseMessage? response;
             try
             {
                 response = await client.PostAsync(API_URL, content);
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"Exception occurred while calling the API: {ex.Message}");
+
                 throw new HttpRequestException("Error occurred while sending the request.", ex);
             }
 

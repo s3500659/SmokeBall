@@ -58,10 +58,10 @@ namespace API
                     }
                 }
 
-                // Remove comma from end of line. 
+                // Remove comma and whitespace from end of line. 
                 if (_sb.GetLength() > 0)
                 {
-                    _sb.Remove(_sb.GetLength() - 2, 1);
+                    _sb.Remove(_sb.GetLength() - 2, 2);
                 }
                 else
                 {

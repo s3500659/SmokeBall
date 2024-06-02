@@ -1,33 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private const int MIN_LIMIT = 1;
+        private const int MAX_LIMIT = 100;
+        private int _searchLimit = MAX_LIMIT;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public int SearchLimit
+        {
+            get { return _searchLimit; }
+            set
+            {
+                _searchLimit = value;
+                OnPropertyChanged(nameof(SearchLimit));
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            tbResults.Text = string.Empty;
+
             string keyword = tbKeywords.Text;
             string searchLimit = tbSearchLimit.Text;
             bool? isGoogle = rbGoogle.IsChecked;
@@ -39,7 +47,12 @@ namespace WPF
 
             if (!int.TryParse(searchLimit, out int limit))
             {
-                limit = 100;
+                return;
+            }
+
+            if (limit < MIN_LIMIT || limit > MAX_LIMIT)
+            {
+                return;
             }
 
             if (isGoogle == null)
@@ -57,7 +70,6 @@ namespace WPF
             var results = await SearchEngineService.SearchAsync(searchInput);
 
             tbResults.Text = results;
-
         }
     }
 }

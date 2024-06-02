@@ -5,16 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="380">
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationErrorTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" Margin="5,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Right"
+                           Text="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                <Border BorderBrush="Red" BorderThickness="1">
+                    <AdornedElementPlaceholder Name="customAdorner"/>
+                </Border>
+            </DockPanel>
+        </ControlTemplate>
+    </Window.Resources>
+
     <Grid>
         <TextBox HorizontalAlignment="Left" Margin="105,14,0,0" TextWrapping="Wrap" Text="Conveyancing Software" VerticalAlignment="Top" Width="252" Name="tbKeywords" />
         <Label Content="Keywords:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Search Engine:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="90"/>
         <Label Content="Search Limit:" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="90"/>
-        <Button Content="Search" HorizontalAlignment="Left" Margin="269,98,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click"/>
-        <TextBox HorizontalAlignment="Left" Margin="105,71,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="120" Name="tbSearchLimit"/>
+        <Button Content="Search" HorizontalAlignment="Left" Margin="269,93,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click"/>
+        <TextBox HorizontalAlignment="Left" Margin="105,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Name="tbSearchLimit">
+            <TextBox.Text>
+                <Binding Path="SearchLimit" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:SearchLimitValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+            <TextBox.ToolTip>
+                <ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="Enter a number between 1 and 100."/>
+                        <TextBlock Text="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Self}}" Foreground="Red"/>
+                    </StackPanel>
+                </ToolTip>
+            </TextBox.ToolTip>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="ToolTip" 
+                                    Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Self}}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
         <RadioButton Content="Google" HorizontalAlignment="Left" Margin="105,47,0,0" VerticalAlignment="Top" GroupName="searchEngine" IsChecked="True" Name="rbGoogle"/>
-        <TextBlock HorizontalAlignment="Left" Margin="86,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Name="tbResults" Height="202" Width="271"/>
+        <TextBlock HorizontalAlignment="Left" Margin="86,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Name="tbResults" Height="202" Width="704"/>
         <Label Content="Result:" HorizontalAlignment="Left" Margin="19,217,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
